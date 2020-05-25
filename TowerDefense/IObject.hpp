@@ -21,7 +21,6 @@ namespace Engine {
 		/// </summary>
 		explicit IObject() = default;
 		/// <summary>
-		/// <summary>
 		/// Construct an IObject.
 		/// </summary>
 		/// <param name="x">X-coordinate.</param>
