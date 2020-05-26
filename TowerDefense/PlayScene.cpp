@@ -134,8 +134,10 @@ void PlayScene::Update(float deltaTime) {
 		ticks += deltaTime;
 		if (enemyWaveData.empty()) {
 			if (EnemyGroup->GetObjects().empty()) {
-				// Free resources.
-				delete TileMapGroup;
+				// the bug is here
+				// since the resources will be deleted when we call GameEngine::changeScene, 
+				// we don't need to delete them here
+				/*delete TileMapGroup;
 				delete GroundEffectGroup;
 				delete DebugIndicatorGroup;
 				delete TowerGroup;
@@ -143,9 +145,10 @@ void PlayScene::Update(float deltaTime) {
 				delete BulletGroup;
 				delete EffectGroup;
 				delete UIGroup;
-				delete imgTarget;
+				delete imgTarget;*/
 				// Win.
-				Engine::GameEngine::GetInstance().ChangeScene("win");
+				// Another bug here : "win-scene" should be "win"
+				Engine::GameEngine::GetInstance().ChangeScene("win"); 
 			}
 			continue;
 		}
@@ -454,11 +457,24 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
 	// BFS from end point.
 	if (mapState[MapHeight - 1][MapWidth - 1] != TILE_DIRT)
 		return map;
-	que.push(Engine::Point(MapWidth - 1, MapHeight - 1));
+	que.push(Engine::Point(MapHeight - 1, MapWidth - 1));
 	map[MapHeight - 1][MapWidth - 1] = 0;
 	while (!que.empty()) {
 		Engine::Point p = que.front();
 		que.pop();
+		for (auto dir : directions)
+		{
+			Engine::Point tmp = p + dir;
+			// check if it's out of range
+			if (tmp.x > MapHeight - 1 || tmp.y > MapWidth - 1 || tmp.x < 0 || tmp.y < 0)
+				continue;
+			// mark the distance and push to the que
+			if (map[tmp.x][tmp.y] == -1 && mapState[tmp.x][tmp.y] == TILE_DIRT)
+			{
+				map[tmp.x][tmp.y] = map[p.x][p.y] + 1;
+				que.push(Engine::Point(tmp.x, tmp.y));
+			}
+		}
 		// TODO 3 (1/1): Implement a BFS starting from the most right-bottom block in the map.
 		//               For each step you should assign the corresponding distance to the most right-bottom block.
 		//               mapState[y][x] is TILE_DIRT if it is empty.
