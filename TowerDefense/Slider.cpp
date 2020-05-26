@@ -17,20 +17,41 @@ Slider::Slider(float x, float y, float w, float h) :
 //               The slider shouldn't be dragged outside the bar, and you should also keep the mouse-in / mouse-out effect.
 void Slider::Draw() const {
 	// TODO 4 (1/6): Draw all components.
+	Bar.Draw();
+	End1.Draw();
+	End2.Draw();
+	ImageButton::Draw();
 }
 void Slider::SetOnValueChangedCallback(std::function<void(float value)> onValueChangedCallback) {
 	// TODO 4 (2/6): Set the function pointer. Can imitate ImageButton's 'SetOnClickCallback'.
+	OnValueChangedCallback = onValueChangedCallback;
 }
 void Slider::SetValue(float value) {
 	// TODO 4 (3/6): Call 'OnValueChangedCallback' when value changed. Can imitate ImageButton's 'OnClickCallback'.
 	//               Also move the slider along the bar, to the corresponding position.
+	this->value = value;
+	OnValueChangedCallback(value);
 }
 void Slider::OnMouseDown(int button, int mx, int my) {
 	// TODO 4 (4/6): Set 'Down' to true if mouse is in the slider.
+	Down = true;
 }
 void Slider::OnMouseUp(int button, int mx, int my) {
 	// TODO 4 (5/6): Set 'Down' to false.
+	Down = false;
 }
 void Slider::OnMouseMove(int mx, int my) {
 	// TODO 4 (6/6): Clamp the coordinates and calculate the value. Call 'SetValue' when you're done.
+	ImageButton::OnMouseMove(mx, my);
+	if (mouseIn && Down)
+	{
+		if (Position.x > End2.Position.x)
+			Position.x = End2.Position.x;
+		else if (Position.x < End1.Position.x)
+			Position.x = End1.Position.x;
+		else
+			Position.x = mx;
+		value = (Position.x-End1.Position.x) / Bar.Size.x;
+		SetValue(value);
+	}
 }
