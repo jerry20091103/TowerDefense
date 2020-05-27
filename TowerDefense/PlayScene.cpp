@@ -406,7 +406,7 @@ void PlayScene::ConstructUI() {
 	// Button 4
 	btn = new TurretButton("play/floor.png", "play/dirt.png",
 		Engine::Sprite("play/tower-base.png", 1446+76, 136, 0, 0, 0, 0),
-		Engine::Sprite("play/turret-8.png", 1446+76, 136, 0, 0, 0, 0)
+		Engine::Sprite("play/turret-8.png", 1446+76+8, 136+8, 0, 0, 0, 0)
 		, 1446+76, 136, LightningTurret::Price);
 	btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 3));
 	UIGroup->AddNewControlObject(btn);
@@ -460,8 +460,10 @@ bool PlayScene::CheckSpaceValid (int x, int y) {
 		if (pnt.x >= MapWidth) pnt.x = MapWidth - 1;
 		if (pnt.y < 0) pnt.y = 0;
 		if (pnt.y >= MapHeight) pnt.y = MapHeight - 1;
-		if (map[pnt.y][pnt.x] == -1) 
+		if (map[pnt.y][pnt.x] == -1 && dynamic_cast<Enemy*>(it)->type != 2)
+		{
 			return false;
+		}
 	}
 	// All enemy have path to exit.
 	mapState[y][x] = TILE_OCCUPIED;

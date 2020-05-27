@@ -5,7 +5,7 @@
 #include "Point.hpp"
 #include "TankEnemy.hpp"
 
-TankEnemy::TankEnemy(int x, int y) : Enemy("play/enemy-3.png", x, y, 20, 25, 100, 50),
+TankEnemy::TankEnemy(int x, int y) : Enemy("play/enemy-3.png", x, y, 20, 25, 100, 50, 3),
 head("play/enemy-3-head.png", x, y), targetRotation(0) {
 }
 void TankEnemy::Draw() const {
