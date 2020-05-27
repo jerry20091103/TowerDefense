@@ -19,6 +19,7 @@
 #include "LaserTurret.hpp"
 #include "MachineGunTurret.hpp"
 #include "MissileTurret.hpp"
+#include "LightningTurret.hpp"
 #include "Plane.hpp"
 #include "PlaneEnemy.hpp"
 #include "PlayScene.hpp"
@@ -39,7 +40,7 @@ const Engine::Point PlayScene::SpawnGridPoint = Engine::Point(-1, 0);
 const Engine::Point PlayScene::EndGridPoint = Engine::Point(MapWidth, MapHeight - 1);
 const std::vector<int> PlayScene::code = { ALLEGRO_KEY_UP, ALLEGRO_KEY_UP, ALLEGRO_KEY_DOWN, ALLEGRO_KEY_DOWN,
 									ALLEGRO_KEY_LEFT, ALLEGRO_KEY_RIGHT, ALLEGRO_KEY_LEFT, ALLEGRO_KEY_RIGHT,
-									ALLEGRO_KEY_B, ALLEGRO_KEY_A, ALLEGRO_KEYMOD_SHIFT, ALLEGRO_KEY_ENTER };
+									ALLEGRO_KEY_B, ALLEGRO_KEY_A, ALLEGRO_KEY_ENTER };
 Engine::Point PlayScene::GetClientSize() {
 	return Engine::Point(MapWidth * BlockSize, MapHeight * BlockSize);
 }
@@ -295,6 +296,10 @@ void PlayScene::OnKeyDown(int keyCode) {
 		UIBtnClicked(2);
 	}
 	// TODO 2 (5/8): Make the R key to create the 4th turret.
+	else if (keyCode == ALLEGRO_KEY_R)
+	{
+		UIBtnClicked(3);
+	}
 	else if (keyCode >= ALLEGRO_KEY_0 && keyCode <= ALLEGRO_KEY_9) {
 		// Hotkey for Speed up.
 		SpeedMult = keyCode - ALLEGRO_KEY_0;
@@ -368,6 +373,10 @@ void PlayScene::ConstructUI() {
 	UIGroup->AddNewObject(new Engine::Label(std::string("Stage ") + std::to_string(MapId), "pirulen.ttf", 32, 1294, 0));
 	UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "pirulen.ttf", 24, 1294, 48));
 	UIGroup->AddNewObject(UILives = new Engine::Label(std::string("Life ") + std::to_string(lives), "pirulen.ttf", 24, 1294, 88));
+	UIGroup->AddNewObject(new Engine::Label(std::string("$") + std::to_string(MachineGunTurret::Price), "pirulen.ttf", 20, 1300, 212));
+	UIGroup->AddNewObject(new Engine::Label(std::string("$") + std::to_string(LaserTurret::Price), "pirulen.ttf", 20, 1294+76, 212));
+	UIGroup->AddNewObject(new Engine::Label(std::string("$") + std::to_string(MissileTurret::Price), "pirulen.ttf", 20, 1294+76*2, 212));
+	UIGroup->AddNewObject(new Engine::Label(std::string("$") + std::to_string(LightningTurret::Price), "pirulen.ttf", 20, 1294+76*3, 212));
 	TurretButton* btn;
 	// Button 1
 	btn = new TurretButton("play/floor.png", "play/dirt.png",
@@ -392,6 +401,13 @@ void PlayScene::ConstructUI() {
 	btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 2));
 	UIGroup->AddNewControlObject(btn);
 	// TODO 2 (3/8): Create a button to support constructing the 4th tower.
+	// Button 4
+	btn = new TurretButton("play/floor.png", "play/dirt.png",
+		Engine::Sprite("play/tower-base.png", 1446+76, 136, 0, 0, 0, 0),
+		Engine::Sprite("play/turret-8.png", 1446+76, 136, 0, 0, 0, 0)
+		, 1446+76, 136, LightningTurret::Price);
+	btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 3));
+	UIGroup->AddNewControlObject(btn);
 	int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
 	int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
 	int shift = 135 + 25;
@@ -412,6 +428,8 @@ void PlayScene::UIBtnClicked(int id) {
 	else if (id == 2 && money >= MissileTurret::Price)
 		preview = new MissileTurret(0, 0);
 	// TODO 2 (4/8): On callback, create the 4th tower.
+	else if (id == 3 && money >= LightningTurret::Price)
+		preview = new LightningTurret(0, 0);
 	if (!preview)
 		return;
 	preview->Position = Engine::GameEngine::GetInstance().GetMousePosition();

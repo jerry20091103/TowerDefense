@@ -18,6 +18,7 @@ PlayScene* Turret::getPlayScene() {
 Turret::Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown) :
 	Sprite(imgTurret, x, y), price(price), coolDown(coolDown), imgBase(imgBase, x, y) {
 	CollisionRadius = radius;
+	reload = coolDown;
 }
 void Turret::Update(float deltaTime) {
 	Sprite::Update(deltaTime);
@@ -64,14 +65,16 @@ void Turret::Update(float deltaTime) {
 			rotation = ((abs(radian) - maxRotateRadian) * originRotation + maxRotateRadian * targetRotation) / radian;
 		// Add 90 degrees (PI/2 radian), since we assume the image is oriented upward.
 		Rotation = atan2(rotation.y, rotation.x) + ALLEGRO_PI / 2;
-		// Shoot reload.
-		reload -= deltaTime;
+
 		if (reload <= 0) {
 			// shoot.
 			reload = coolDown;
 			CreateBullet();
 		}
 	}
+	// Shoot reload.
+	if (reload > 0)
+		reload -= deltaTime;
 }
 void Turret::Draw() const {
 	if (Preview) {
