@@ -50,6 +50,7 @@ public:
 	Group* TowerGroup;
 	Group* EnemyGroup;
 	Group* EffectGroup;
+	Group* PlaneEnemyGroup;
 	Group* UIGroup;
 	Engine::Label* UIMoney;
 	Engine::Label* UILives;

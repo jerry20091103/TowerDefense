@@ -48,6 +48,16 @@ void Turret::Update(float deltaTime) {
 				break;
 			}
 		}
+		// add PlaneEnemyGroup!
+		for (auto& it : scene->PlaneEnemyGroup->GetObjects()) {
+			Engine::Point diff = it->Position - Position;
+			if (diff.Magnitude() <= CollisionRadius) {
+				Target = dynamic_cast<Enemy*>(it);
+				Target->lockedTurrets.push_back(this);
+				lockedTurretIterator = std::prev(Target->lockedTurrets.end());
+				break;
+			}
+		}
 	}
 	if (Target) {
 		Engine::Point originRotation = Engine::Point(cos(Rotation - ALLEGRO_PI / 2), sin(Rotation - ALLEGRO_PI / 2));

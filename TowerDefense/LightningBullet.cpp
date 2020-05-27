@@ -32,7 +32,17 @@ void LightningBullet::Update(float deltaTime)
 	PlayScene* scene = getPlayScene();
 	// Can be improved by Spatial Hash, Quad Tree, ...
 	// However simply loop through all enemies is enough for this program.
+	// add PlaneEnemyGroup !
 	for (auto& it : scene->EnemyGroup->GetObjects()) {
+		Enemy* enemy = dynamic_cast<Enemy*>(it);
+		if (!enemy->Visible)
+			continue;
+		if (Engine::Collider::IsCircleOverlap(Position, CollisionRadius, enemy->Position, enemy->CollisionRadius)) {
+			OnExplode(enemy);
+			enemy->Hit(damage);
+		}
+	}
+	for (auto& it : scene->PlaneEnemyGroup->GetObjects()) {
 		Enemy* enemy = dynamic_cast<Enemy*>(it);
 		if (!enemy->Visible)
 			continue;

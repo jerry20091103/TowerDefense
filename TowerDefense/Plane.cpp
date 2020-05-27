@@ -74,6 +74,12 @@ void Plane::Update(float deltaTime) {
 			if (Engine::Collider::IsCircleOverlap(Position, CollisionRadius, enemy->Position, enemy->CollisionRadius))
 				enemy->Hit(INFINITY);
 		}
+		// add PlaneEnemyGroup !
+		for (auto& it : getPlayScene()->PlaneEnemyGroup->GetObjects()) {
+			Enemy* enemy = dynamic_cast<Enemy*>(it);
+			if (Engine::Collider::IsCircleOverlap(Position, CollisionRadius, enemy->Position, enemy->CollisionRadius))
+				enemy->Hit(INFINITY);
+		}
 		break;
 	case 3:
 		getPlayScene()->EffectGroup->RemoveObject(objectIterator);

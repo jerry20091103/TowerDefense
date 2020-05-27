@@ -28,6 +28,15 @@ void MissileBullet::Update(float deltaTime) {
 				enemy = e;
 			}
 		}
+		// add PlaneEnemyGroup
+		for (auto& it : getPlayScene()->PlaneEnemyGroup->GetObjects()) {
+			Enemy* e = dynamic_cast<Enemy*>(it);
+			float distance = (e->Position - Position).Magnitude();
+			if (distance < minDistance) {
+				minDistance = distance;
+				enemy = e;
+			}
+		}
 		if (!enemy) {
 			Bullet::Update(deltaTime);
 			return;
