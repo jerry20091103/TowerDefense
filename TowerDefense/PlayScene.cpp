@@ -62,7 +62,6 @@ void PlayScene::Initialize() {
 	AddNewObject(EnemyGroup = new Group());
 	AddNewObject(BulletGroup = new Group());
 	AddNewObject(EffectGroup = new Group());
-	AddNewObject(PlaneEnemyGroup = new Group());
 	// Should support buttons.
 	AddNewControlObject(UIGroup = new Group());
 	ReadMap();
@@ -95,9 +94,6 @@ void PlayScene::Update(float deltaTime) {
 	// Calculate danger zone.
 	std::vector<float> reachEndTimes;
 	for (auto& it : EnemyGroup->GetObjects()) {
-		reachEndTimes.push_back(dynamic_cast<Enemy*>(it)->reachEndTime);
-	}
-	for (auto& it : PlaneEnemyGroup->GetObjects()) {
 		reachEndTimes.push_back(dynamic_cast<Enemy*>(it)->reachEndTime);
 	}
 
@@ -139,7 +135,7 @@ void PlayScene::Update(float deltaTime) {
 		// Check if we should create new enemy.
 		ticks += deltaTime;
 		if (enemyWaveData.empty()) {
-			if (EnemyGroup->GetObjects().empty() && PlaneEnemyGroup->GetObjects().empty()) {
+			if (EnemyGroup->GetObjects().empty()) {
 				// the bug is here
 				// since the resources will be deleted when we call GameEngine::changeScene, 
 				// we don't need to delete them here
@@ -170,7 +166,7 @@ void PlayScene::Update(float deltaTime) {
 			EnemyGroup->AddNewObject(enemy = new SoldierEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
 			break;
 		case 2:
-			PlaneEnemyGroup->AddNewObject(enemy = new PlaneEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+			EnemyGroup->AddNewObject(enemy = new PlaneEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
 			break;
 		case 3:
 			EnemyGroup->AddNewObject(enemy = new TankEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
