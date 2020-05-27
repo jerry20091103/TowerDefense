@@ -5,5 +5,6 @@
 class PlaneEnemy : public Enemy {
 public:
 	PlaneEnemy(int x, int y);
+	void UpdatePath(const std::vector<std::vector<int>>& mapDistance) override;
 };
 #endif // PLANEENEMY_HPP

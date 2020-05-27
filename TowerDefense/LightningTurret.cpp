@@ -11,7 +11,7 @@
 const int LightningTurret::Price = 400;
 LightningTurret::LightningTurret(float x, float y):
 	// TODO 2 (2/8): You can imitate the 2 files: 'MachineGunTurret.hpp', 'MachineGunTurret.cpp' to create a new turret.
-	Turret("play/tower-base.png", "play/turret-8.png", x, y, 130, Price, 5) 
+	Turret("play/tower-base.png", "play/turret-8.png", x, y, 130, Price, 5.5) 
 {
 }
 

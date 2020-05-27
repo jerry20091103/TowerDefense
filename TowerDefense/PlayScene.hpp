@@ -77,7 +77,7 @@ public:
 	void ReadEnemyWave();
 	void ConstructUI();
 	void UIBtnClicked(int id);
-	bool CheckSpaceValid(int x, int y);
+	bool CheckSpaceValid (int x, int y) ;
 	std::vector<std::vector<int>> CalculateBFSDistance();
 	// void ModifyReadMapTiles();
 };

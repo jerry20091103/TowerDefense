@@ -96,6 +96,7 @@ void PlayScene::Update(float deltaTime) {
 	for (auto& it : EnemyGroup->GetObjects()) {
 		reachEndTimes.push_back(dynamic_cast<Enemy*>(it)->reachEndTime);
 	}
+
 	// Can use Heap / Priority-Queue instead. But since we won't have too many enemies, sorting is fast enough.
 	std::sort(reachEndTimes.begin(), reachEndTimes.end());
 	float newDeathCountDown = -1;
@@ -185,6 +186,7 @@ void PlayScene::Update(float deltaTime) {
 		// To keep responding when paused.
 		preview->Update(deltaTime);
 	}
+
 }
 void PlayScene::Draw() const {
 	IScene::Draw();
@@ -192,7 +194,7 @@ void PlayScene::Draw() const {
 		// Draw reverse BFS distance on all reachable blocks.
 		for (int i = 0; i < MapHeight; i++) {
 			for (int j = 0; j < MapWidth; j++) {
-				if (mapDistance[i][j] != -1) {
+				if (mapDistance[i][j] != -2) {
 					// Not elegant nor efficient, but it's quite enough for debugging.
 					Engine::Label label(std::to_string(mapDistance[i][j]), "pirulen.ttf", 32, (j + 0.5) * BlockSize, (i + 0.5) * BlockSize);
 					label.Anchor = Engine::Point(0.5, 0.5);
@@ -355,7 +357,7 @@ void PlayScene::ReadMap() {
 	}
 }
 void PlayScene::ReadEnemyWave() {
-	std::string filename = std::string("resources/enemy") + std::to_string(MapId) + ".txt";
+	std::string filename = std::string("resources/enemy") + std::to_string(2) + ".txt";
 	// Read enemy file.
 	float type, wait, repeat;
 	enemyWaveData.clear();
@@ -440,7 +442,7 @@ void PlayScene::UIBtnClicked(int id) {
 	OnMouseMove(Engine::GameEngine::GetInstance().GetMousePosition().x, Engine::GameEngine::GetInstance().GetMousePosition().y);
 }
 
-bool PlayScene::CheckSpaceValid(int x, int y) {
+bool PlayScene::CheckSpaceValid (int x, int y) {
 	if (x < 0 || x >= MapWidth || y < 0 || y >= MapHeight)
 		return false;
 	auto map00 = mapState[y][x];
@@ -449,6 +451,7 @@ bool PlayScene::CheckSpaceValid(int x, int y) {
 	mapState[y][x] = map00;
 	if (map[0][0] == -1)
 		return false;
+	// need to exclude PlaneEnemy since it flies in the air
 	for (auto& it : EnemyGroup->GetObjects()) {
 		Engine::Point pnt;
 		pnt.x = floor(it->Position.x / BlockSize);
@@ -457,7 +460,7 @@ bool PlayScene::CheckSpaceValid(int x, int y) {
 		if (pnt.x >= MapWidth) pnt.x = MapWidth - 1;
 		if (pnt.y < 0) pnt.y = 0;
 		if (pnt.y >= MapHeight) pnt.y = MapHeight - 1;
-		if (map[pnt.y][pnt.x] == -1)
+		if (map[pnt.y][pnt.x] == -1) 
 			return false;
 	}
 	// All enemy have path to exit.
