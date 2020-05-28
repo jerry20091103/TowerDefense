@@ -9,8 +9,8 @@
 #include "Resources.hpp"
 
 namespace Engine {
-	ImageButton::ImageButton(std::string img, std::string imgIn, float x, float y, float w, float h, float anchorX, float anchorY) :
-		Image(img, x, y, w, h, anchorX, anchorY), imgOut(Resources::GetInstance().GetBitmap(img)), imgIn(Resources::GetInstance().GetBitmap(imgIn)) {
+	ImageButton::ImageButton(std::string img, std::string imgIn, float x, float y, float w, float h, float anchorX, float anchorY, Engine::Label *label) :
+		Image(img, x, y, w, h, anchorX, anchorY), imgOut(Resources::GetInstance().GetBitmap(img)), imgIn(Resources::GetInstance().GetBitmap(imgIn)), label(label) {
 		Point mouse = GameEngine::GetInstance().GetMousePosition();
 		mouseIn = Collider::IsPointInBitmap(Point((mouse.x - Position.x) * GetBitmapWidth() / Size.x + Anchor.x * GetBitmapWidth(), (mouse.y - Position.y) * GetBitmapHeight() / Size.y + Anchor.y * GetBitmapHeight()), bmp);
 		if (!mouseIn || !Enabled) bmp = imgOut;
@@ -18,6 +18,10 @@ namespace Engine {
 	}
 	void ImageButton::SetOnClickCallback(std::function<void(void)> onClickCallback) {
 		OnClickCallback = onClickCallback;
+	}
+	void ImageButton::SetLabelBinding(Engine::Label * label)
+	{
+		this->label = label;
 	}
 	void ImageButton::OnMouseDown(int button, int mx, int my) {
 		if ((button & 1) && mouseIn && Enabled) {
@@ -27,7 +31,17 @@ namespace Engine {
 	}
 	void ImageButton::OnMouseMove(int mx, int my) {
 		mouseIn = Collider::IsPointInBitmap(Point((mx - Position.x) * GetBitmapWidth() / Size.x + Anchor.x * GetBitmapWidth(), (my - Position.y) * GetBitmapHeight() / Size.y + Anchor.y * GetBitmapHeight()), bmp);
-		if (!mouseIn || !Enabled) bmp = imgOut;
-		else bmp = imgIn;
+		if (!mouseIn || !Enabled)
+		{
+			bmp = imgOut;
+			if (label != nullptr)
+				label->Color = al_map_rgb(0, 0, 0);
+		}
+		else
+		{
+			bmp = imgIn;
+			if (label != nullptr)
+				label->Color = al_map_rgb(255, 255, 255);
+		}
 	}
 }

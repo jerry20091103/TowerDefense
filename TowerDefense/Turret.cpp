@@ -9,8 +9,10 @@
 #include "IObject.hpp"
 #include "IScene.hpp"
 #include "PlayScene.hpp"
+#include "StartScene.hpp"
 #include "Point.hpp"
 #include "Turret.hpp"
+
 
 PlayScene* Turret::getPlayScene() {
 	return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
@@ -20,7 +22,16 @@ Turret::Turret(std::string imgBase, std::string imgTurret, float x, float y, flo
 	CollisionRadius = radius;
 	reload = coolDown;
 }
+
 void Turret::Update(float deltaTime) {
+	// don't update in other scenes
+	if (getPlayScene() == nullptr)
+	{
+		// get rid of green tint
+		if (reload > 0)
+			reload = 0;
+		return;
+	}
 	Sprite::Update(deltaTime);
 	PlayScene* scene = getPlayScene();
 	imgBase.Position = Position;

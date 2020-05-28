@@ -3,6 +3,8 @@
 #include <allegro5/allegro_audio.h>
 #include <memory>
 #include "IScene.hpp"
+#include "Label.hpp"
+#include "ImageButton.hpp"
 
 class StageSelectScene final : public Engine::IScene {
 private:
@@ -14,6 +16,7 @@ public:
 	void PlayOnClick(int stage);
 	void BGMSlideOnValueChanged(float value);
 	void SFXSlideOnValueChanged(float value);
+	void OnMouseMove(int mx, int my) override;
 };
 
 #endif // STAGESELECTSCENE_HPP

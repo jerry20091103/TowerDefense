@@ -8,6 +8,7 @@
 
 class Enemy;
 class PlayScene;
+class StartScene;
 
 class Turret: public Engine::Sprite {
 protected:

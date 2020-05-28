@@ -352,7 +352,7 @@ void PlayScene::ReadMap() {
 			if (num)
 				TileMapGroup->AddNewObject(new Engine::Image("play/floor.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
 			else
-				TileMapGroup->AddNewObject(new Engine::Image("play/dirt.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
+				TileMapGroup->AddNewObject(new Engine::Image("play/Gridx1.png", j * BlockSize, i * BlockSize, BlockSize, BlockSize));
 		}
 	}
 }
@@ -406,7 +406,7 @@ void PlayScene::ConstructUI() {
 	// Button 4
 	btn = new TurretButton("play/floor.png", "play/dirt.png",
 		Engine::Sprite("play/tower-base.png", 1446+76, 136, 0, 0, 0, 0),
-		Engine::Sprite("play/turret-8.png", 1446+76+8, 136+8, 0, 0, 0, 0)
+		Engine::Sprite("play/turret-8.png", 1446+76+4, 136+4, 0, 0, 0, 0)
 		, 1446+76, 136, LightningTurret::Price);
 	btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 3));
 	UIGroup->AddNewControlObject(btn);

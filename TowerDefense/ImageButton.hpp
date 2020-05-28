@@ -7,6 +7,7 @@
 
 #include "IControl.hpp"
 #include "Image.hpp"
+#include "Label.hpp"
 
 namespace Engine {
 	/// <summary>
@@ -14,8 +15,6 @@ namespace Engine {
 	/// </summary>
 	class ImageButton: public Image, public IControl {
 	protected:
-		// Determines whether mouse is in the button.
-		bool mouseIn = false;
 		// The smart pointer that points to bitmap for mouse-out display.
 		std::shared_ptr<ALLEGRO_BITMAP> imgOut;
 		// The smart pointer that points to bitmap for mouse-in display.
@@ -23,6 +22,10 @@ namespace Engine {
 		// The callback function to call when button clicked.
 		std::function<void()> OnClickCallback;
 	public:
+		// The Label text it is binded to
+		Engine::Label* label;
+		// Determines whether mouse is in the button.
+		bool mouseIn = false;
 		// Whether the button can be pressed.
 		bool Enabled = true;
 		/// <summary>
@@ -36,12 +39,18 @@ namespace Engine {
 		/// <param name="h">Height of the image, 0 indicates original size.</param>
 		/// <param name="anchorX">The centerX of the object. (0, 0) means top-left, while (1, 0) means top-right.</param>
 		/// <param name="anchorY">The centerY of the object. (0, 1) means bottom-left, while (1, 1) means bottom-right.</param>
-		explicit ImageButton(std::string img, std::string imgIn, float x, float y, float w = 0, float h = 0, float anchorX = 0, float anchorY = 0);
+		/// <param name="label">bind the button to a label.</param>
+		explicit ImageButton(std::string img, std::string imgIn, float x, float y, float w = 0, float h = 0, float anchorX = 0, float anchorY = 0, Engine::Label* label = nullptr);
 		/// <summary>
 		/// Set the callback function when clicked.
 		/// </summary>
 		/// <param name="onClickCallback"></param>
 		void SetOnClickCallback(std::function<void(void)> onClickCallback);
+		/// <summary>
+		/// Set the Label the button is binded to.
+		/// </summary>
+		/// <param name="label"></param>
+		void SetLabelBinding(Engine::Label* label);
 		/// <summary>
 		/// Delegated from scene when mouse button down.
 		/// </summary>
