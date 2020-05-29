@@ -7,10 +7,12 @@
 #include "Sprite.hpp"
 
 class PlayScene;
+class StartScene;
 
 class ExplosionEffect : public Engine::Sprite {
 protected:
 	PlayScene* getPlayScene();
+	StartScene* getStartScene();
 	float timeTicks;
 	std::vector<std::shared_ptr<ALLEGRO_BITMAP>> bmps;
 	float timeSpan = 0.5;

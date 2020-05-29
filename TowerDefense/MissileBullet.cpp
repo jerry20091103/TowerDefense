@@ -9,6 +9,7 @@
 #include "IObject.hpp"
 #include "MissileBullet.hpp"
 #include "PlayScene.hpp"
+#include "StartScene.hpp"
 #include "Point.hpp"
 
 class Turret;
@@ -20,12 +21,26 @@ void MissileBullet::Update(float deltaTime) {
 	if (!Target) {
 		float minDistance = INFINITY;
 		Enemy* enemy = nullptr;
-		for (auto& it : getPlayScene()->EnemyGroup->GetObjects()) {
-			Enemy* e = dynamic_cast<Enemy*>(it);
-			float distance = (e->Position - Position).Magnitude();
-			if (distance < minDistance) {
-				minDistance = distance;
-				enemy = e;
+		if (getPlayScene() != nullptr)
+		{
+			for (auto& it : getPlayScene()->EnemyGroup->GetObjects()) {
+				Enemy* e = dynamic_cast<Enemy*>(it);
+				float distance = (e->Position - Position).Magnitude();
+				if (distance < minDistance) {
+					minDistance = distance;
+					enemy = e;
+				}
+			}
+		}
+		else if (getStartScene() != nullptr)
+		{
+			for (auto& it : getStartScene()->EnemyGroup->GetObjects()) {
+				Enemy* e = dynamic_cast<Enemy*>(it);
+				float distance = (e->Position - Position).Magnitude();
+				if (distance < minDistance) {
+					minDistance = distance;
+					enemy = e;
+				}
 			}
 		}
 		if (!enemy) {
@@ -57,5 +72,8 @@ void MissileBullet::OnExplode(Enemy* enemy) {
 	std::random_device dev;
 	std::mt19937 rng(dev());
 	std::uniform_int_distribution<std::mt19937::result_type> dist(4, 10);
-	getPlayScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-3.png", dist(rng), enemy->Position.x, enemy->Position.y));
+	if(getPlayScene() != nullptr)
+		getPlayScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-3.png", dist(rng), enemy->Position.x, enemy->Position.y));
+	else if(getStartScene()!= nullptr)
+		getStartScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-3.png", dist(rng), enemy->Position.x, enemy->Position.y));
 }

@@ -15,20 +15,43 @@
 #include "IScene.hpp"
 #include "LOG.hpp"
 #include "PlayScene.hpp"
+#include "StartScene.hpp"
 #include "Turret.hpp"
+#include "Collider.hpp"
+
+StartScene* Enemy::getStartScene() {
+	return dynamic_cast<StartScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
+}
 
 PlayScene* Enemy::getPlayScene() {
 	return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
 }
 void Enemy::OnExplode() {
-	getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));
-	std::random_device dev;
-	std::mt19937 rng(dev());
-	std::uniform_int_distribution<std::mt19937::result_type> distId(1, 3);
-	std::uniform_int_distribution<std::mt19937::result_type> dist(1, 20);
-	for (int i = 0; i < 10; i++) {
-		// Random add 10 dirty effects.
-		getPlayScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-" + std::to_string(distId(rng)) + ".png", dist(rng), Position.x, Position.y));
+	// for start scene
+	if (getStartScene() != nullptr)
+	{
+		getStartScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));
+		std::random_device dev;
+		std::mt19937 rng(dev());
+		std::uniform_int_distribution<std::mt19937::result_type> distId(1, 3);
+		std::uniform_int_distribution<std::mt19937::result_type> dist(1, 20);
+		for (int i = 0; i < 10; i++) {
+			// Random add 10 dirty effects.
+			getStartScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-" + std::to_string(distId(rng)) + ".png", dist(rng), Position.x, Position.y));
+		}
+	}
+	// for play scene
+	else if (getPlayScene() != nullptr)
+	{
+		getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));
+		std::random_device dev;
+		std::mt19937 rng(dev());
+		std::uniform_int_distribution<std::mt19937::result_type> distId(1, 3);
+		std::uniform_int_distribution<std::mt19937::result_type> dist(1, 20);
+		for (int i = 0; i < 10; i++) {
+			// Random add 10 dirty effects.
+			getPlayScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-" + std::to_string(distId(rng)) + ".png", dist(rng), Position.x, Position.y));
+		}
 	}
 }
 Enemy::Enemy(std::string img, float x, float y, float radius, float speed, float hp, int money, int type) :
@@ -45,12 +68,26 @@ void Enemy::Hit(float damage) {
 			it->Target = nullptr;
 		for (auto& it: lockedBullets)
 			it->Target = nullptr;
-		getPlayScene()->EarnMoney(money);
-		getPlayScene()->EnemyGroup->RemoveObject(objectIterator);
-		AudioHelper::PlayAudio("explosion.wav");
+		if (getStartScene() != nullptr)
+		{
+			getStartScene()->EnemyGroup->RemoveObject(objectIterator);
+			AudioHelper::PlayAudio("explosion.wav");
+		}
+		else if (getPlayScene() != nullptr)
+		{
+			getPlayScene()->EarnMoney(money);
+			getPlayScene()->EnemyGroup->RemoveObject(objectIterator);
+			AudioHelper::PlayAudio("explosion.wav");
+		}
 	}
 }
 void Enemy::UpdatePath(const std::vector<std::vector<int>>& mapDistance) {
+	if (getPlayScene() == nullptr)
+	{
+		path = std::vector<Engine::Point>(1);
+		path[0] = Engine::Point(25*StartScene::blocksize, 0);
+		return;
+	}
 	int x = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
 	int y = static_cast<int>(floor(Position.y / PlayScene::BlockSize));
 	if (x < 0) x = 0;
@@ -90,7 +127,8 @@ void Enemy::Update(float deltaTime) {
 		if (path.empty()) {
 			// Reach end point.
 			Hit(hp);
-			getPlayScene()->Hit();
+			if (getPlayScene() != nullptr)
+				getPlayScene()->Hit();
 			reachEndTime = 0;
 			return;
 		}
@@ -115,6 +153,17 @@ void Enemy::Update(float deltaTime) {
 	}
 	Rotation = atan2(Velocity.y, Velocity.x);
 	Sprite::Update(deltaTime);
+	// Check if out of boundary.
+	if (getPlayScene() != nullptr)
+	{
+		if (!Engine::Collider::IsRectOverlap(Position - Size / 2, Position + Size / 2, Engine::Point(0, 0), Engine::Point(1600, 833)))
+			getPlayScene()->EnemyGroup->RemoveObject(objectIterator);
+	}
+	else if (getStartScene() != nullptr)
+	{
+		if (!Engine::Collider::IsRectOverlap(Position - Size / 2, Position + Size / 2, Engine::Point(0, 0), Engine::Point(1600, 833)))
+			getStartScene()->EnemyGroup->RemoveObject(objectIterator);
+	}
 }
 void Enemy::Draw() const {
 	Sprite::Draw();

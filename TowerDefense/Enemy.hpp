@@ -10,6 +10,7 @@
 
 class Bullet;
 class PlayScene;
+class StartScene;
 class Turret;
 
 class Enemy : public Engine::Sprite {
@@ -21,6 +22,7 @@ protected:
 	int money;
 	int type; // store which type the enemy is
 	PlayScene* getPlayScene();
+	StartScene* getStartScene();
 	virtual void OnExplode();
 public:
 	float reachEndTime;

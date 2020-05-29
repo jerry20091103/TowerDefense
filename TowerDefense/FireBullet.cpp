@@ -7,6 +7,7 @@
 #include "FireBullet.hpp"
 #include "Group.hpp"
 #include "PlayScene.hpp"
+#include "StartScene.hpp"
 #include "Point.hpp"
 
 class Turret;
@@ -19,6 +20,10 @@ void FireBullet::OnExplode(Enemy* enemy) {
 	std::random_device dev;
 	std::mt19937 rng(dev());
 	std::uniform_int_distribution<std::mt19937::result_type> dist(2, 5);
-	getPlayScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-1.png", dist(rng), enemy->Position.x, enemy->Position.y));
+	if (getPlayScene() != nullptr)
+		getPlayScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-1.png", dist(rng), enemy->Position.x, enemy->Position.y));
+	else if(getStartScene() != nullptr)
+		getStartScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-1.png", dist(rng), enemy->Position.x, enemy->Position.y));
+
 }
 

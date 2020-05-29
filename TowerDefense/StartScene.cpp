@@ -39,6 +39,8 @@ void StartScene::Initialize()
 	AddNewObject(startbtntext = new Engine::Label("Start", "Inkfree.ttf", 56, halfW, halfH * 8 / 5, 0, 0, 0, 255, 0.5, 0.5));
 	// BGM
 	bgmInstance = AudioHelper::PlaySample("select.ogg", true, AudioHelper::BGMVolume, 0);
+	// ground effect
+	AddNewObject(GroundEffectGroup = new Group);
 	// Turrets
 	AddNewObject(TowerGroup = new Group());
 	TowerGroup->AddNewObject(new MachineGunTurret(5 * blocksize, 8 * blocksize));
@@ -47,6 +49,40 @@ void StartScene::Initialize()
 	TowerGroup->AddNewObject(new LaserTurret(20 * blocksize, 8 * blocksize));
 	// Enemies
 	AddNewObject(EnemyGroup = new Group());
+	// bullets
+	AddNewObject(BulletGroup = new Group());
+	// effect
+	AddNewObject(EffectGroup = new Group());
+}
+
+void StartScene::Update(float deltatime)
+{
+	IScene::Update(deltatime);
+	last_spawn += deltatime;
+	if (last_spawn > 2.3)
+	{
+		std::random_device dev;
+		std::mt19937 rng(dev());
+		std::uniform_int_distribution<std::mt19937::result_type> dist(3, 3);
+		int cur_enemy = dist(rng);
+		Enemy* enemy;
+		switch (cur_enemy) {
+		case 1:
+			EnemyGroup->AddNewObject(enemy = new SoldierEnemy(0*blocksize, 6.25 * blocksize));
+			break;
+		case 2:
+			EnemyGroup->AddNewObject(enemy = new PlaneEnemy(0*blocksize, 6.25 * blocksize));
+			break;
+		case 3:
+			EnemyGroup->AddNewObject(enemy = new TankEnemy(0*blocksize, 6.25 * blocksize));
+			break;
+		default:
+			return;
+		}
+		last_spawn = 0;
+		std::vector<std::vector<int>> mapDistance; // dummy
+		enemy->UpdatePath(mapDistance);
+	}
 }
 
 void StartScene::Terminate()

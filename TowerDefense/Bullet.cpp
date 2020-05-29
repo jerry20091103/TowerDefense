@@ -6,8 +6,13 @@
 #include "IObject.hpp"
 #include "IScene.hpp"
 #include "PlayScene.hpp"
+#include "StartScene.hpp"
 #include "Point.hpp"
 #include "Sprite.hpp"
+
+StartScene* Bullet::getStartScene() {
+	return dynamic_cast<StartScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
+}
 
 PlayScene* Bullet::getPlayScene() {
 	return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
@@ -22,21 +27,44 @@ Bullet::Bullet(std::string img, float speed, float damage, Engine::Point positio
 }
 void Bullet::Update(float deltaTime) {
 	Sprite::Update(deltaTime);
-	PlayScene* scene = getPlayScene();
-	// Can be improved by Spatial Hash, Quad Tree, ...
-	// However simply loop through all enemies is enough for this program.
-	for (auto& it : scene->EnemyGroup->GetObjects()) {
-		Enemy* enemy = dynamic_cast<Enemy*>(it);
-		if (!enemy->Visible)
-			continue;
-		if (Engine::Collider::IsCircleOverlap(Position, CollisionRadius, enemy->Position, enemy->CollisionRadius)) {
-			OnExplode(enemy);
-			enemy->Hit(damage);
-			getPlayScene()->BulletGroup->RemoveObject(objectIterator);
-			return;
+	if (getStartScene() != nullptr)
+	{
+		StartScene* scene = getStartScene();
+		// Can be improved by Spatial Hash, Quad Tree, ...
+		// However simply loop through all enemies is enough for this program.
+		for (auto& it : scene->EnemyGroup->GetObjects()) {
+			Enemy* enemy = dynamic_cast<Enemy*>(it);
+			if (!enemy->Visible)
+				continue;
+			if (Engine::Collider::IsCircleOverlap(Position, CollisionRadius, enemy->Position, enemy->CollisionRadius)) {
+				OnExplode(enemy);
+				enemy->Hit(damage);
+				getStartScene()->BulletGroup->RemoveObject(objectIterator);
+				return;
+			}
 		}
+		// Check if out of boundary.
+		if (!Engine::Collider::IsRectOverlap(Position - Size / 2, Position + Size / 2, Engine::Point(0, 0), Engine::Point(1600, 833)))
+			getStartScene()->BulletGroup->RemoveObject(objectIterator);
 	}
-	// Check if out of boundary.
-	if (!Engine::Collider::IsRectOverlap(Position - Size / 2, Position + Size / 2, Engine::Point(0, 0), PlayScene::GetClientSize()))
-		getPlayScene()->BulletGroup->RemoveObject(objectIterator);
+	else if (getPlayScene() != nullptr)
+	{
+		PlayScene* scene = getPlayScene();
+		// Can be improved by Spatial Hash, Quad Tree, ...
+		// However simply loop through all enemies is enough for this program.
+		for (auto& it : scene->EnemyGroup->GetObjects()) {
+			Enemy* enemy = dynamic_cast<Enemy*>(it);
+			if (!enemy->Visible)
+				continue;
+			if (Engine::Collider::IsCircleOverlap(Position, CollisionRadius, enemy->Position, enemy->CollisionRadius)) {
+				OnExplode(enemy);
+				enemy->Hit(damage);
+				getPlayScene()->BulletGroup->RemoveObject(objectIterator);
+				return;
+			}
+		}
+		// Check if out of boundary.
+		if (!Engine::Collider::IsRectOverlap(Position - Size / 2, Position + Size / 2, Engine::Point(0, 0), PlayScene::GetClientSize()))
+			getPlayScene()->BulletGroup->RemoveObject(objectIterator);
+	}
 }

@@ -7,6 +7,11 @@
 #include "Group.hpp"
 #include "IScene.hpp"
 #include "PlayScene.hpp"
+#include "StartScene.hpp"
+
+StartScene* DirtyEffect::getStartScene() {
+	return dynamic_cast<StartScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
+}
 
 PlayScene* DirtyEffect::getPlayScene() {
 	return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
@@ -20,7 +25,10 @@ DirtyEffect::DirtyEffect(std::string img, float timeSpan, float x, float y) : Sp
 void DirtyEffect::Update(float deltaTime) {
 	alpha -= deltaTime / timeSpan;
 	if (alpha <= 0) {
-		getPlayScene()->GroundEffectGroup->RemoveObject(objectIterator);
+		if (getPlayScene() != nullptr)
+			getPlayScene()->GroundEffectGroup->RemoveObject(objectIterator);
+		else if(getStartScene() != nullptr)
+			getStartScene()->GroundEffectGroup->RemoveObject(objectIterator);
 		return;
 	}
 	unsigned char r, g ,b, a = alpha * 255;

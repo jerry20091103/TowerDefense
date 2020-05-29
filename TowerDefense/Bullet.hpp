@@ -6,6 +6,7 @@
 
 class Enemy;
 class PlayScene;
+class StartScene;
 class Turret;
 namespace Engine {
 struct Point;
@@ -17,6 +18,7 @@ protected:
 	float damage;
 	Turret* parent;
 	PlayScene* getPlayScene();
+	StartScene* getStartScene();
 	virtual void OnExplode(Enemy* enemy);
 public:
 	Enemy* Target = nullptr;

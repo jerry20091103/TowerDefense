@@ -13,6 +13,9 @@
 #include "Point.hpp"
 #include "Turret.hpp"
 
+StartScene* Turret::getStartScene() {
+	return dynamic_cast<StartScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
+}
 
 PlayScene* Turret::getPlayScene() {
 	return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
@@ -24,16 +27,10 @@ Turret::Turret(std::string imgBase, std::string imgTurret, float x, float y, flo
 }
 
 void Turret::Update(float deltaTime) {
+	
 	// don't update in other scenes
-	if (getPlayScene() == nullptr)
-	{
-		// get rid of green tint
-		if (reload > 0)
-			reload = 0;
-		return;
-	}
+	
 	Sprite::Update(deltaTime);
-	PlayScene* scene = getPlayScene();
 	imgBase.Position = Position;
 	imgBase.Tint = Tint;
 	if (!Enabled)
@@ -50,13 +47,31 @@ void Turret::Update(float deltaTime) {
 		// Lock first seen target.
 		// Can be improved by Spatial Hash, Quad Tree, ...
 		// However simply loop through all enemies is enough for this program.
-		for (auto& it : scene->EnemyGroup->GetObjects()) {
-			Engine::Point diff = it->Position - Position;
-			if (diff.Magnitude() <= CollisionRadius) {
-				Target = dynamic_cast<Enemy*>(it);
-				Target->lockedTurrets.push_back(this);
-				lockedTurretIterator = std::prev(Target->lockedTurrets.end());
-				break;
+		// for play scene
+		if (getPlayScene() != nullptr)
+		{
+			PlayScene* scene = getPlayScene();
+			for (auto& it : scene->EnemyGroup->GetObjects()) {
+				Engine::Point diff = it->Position - Position;
+				if (diff.Magnitude() <= CollisionRadius) {
+					Target = dynamic_cast<Enemy*>(it);
+					Target->lockedTurrets.push_back(this);
+					lockedTurretIterator = std::prev(Target->lockedTurrets.end());
+					break;
+				}
+			}
+		}
+		else if (getStartScene() != nullptr)
+		{
+			StartScene* scene = getStartScene();
+			for (auto& it : scene->EnemyGroup->GetObjects()) {
+				Engine::Point diff = it->Position - Position;
+				if (diff.Magnitude() <= CollisionRadius) {
+					Target = dynamic_cast<Enemy*>(it);
+					Target->lockedTurrets.push_back(this);
+					lockedTurretIterator = std::prev(Target->lockedTurrets.end());
+					break;
+				}
 			}
 		}
 	}

@@ -17,6 +17,12 @@ PlaneEnemy::PlaneEnemy(int x, int y) : Enemy("play/enemy-2.png", x, y, 16, 120, 
 // overide the UpdatePath function to change enemyplane's behavior
 void PlaneEnemy::UpdatePath(const std::vector<std::vector<int>>& mapDistance)
 {
+	if (getPlayScene() == nullptr)
+	{
+		path = std::vector<Engine::Point>(1);
+		path[0] = Engine::Point(25*PlayScene::BlockSize, 0);
+		return;
+	}
 	path = std::vector<Engine::Point>(1);
 	path[0] = PlayScene::EndGridPoint;
 }

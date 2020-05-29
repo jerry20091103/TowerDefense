@@ -5,6 +5,7 @@
 #include "LightningBullet.hpp"
 #include "Group.hpp"
 #include "PlayScene.hpp"
+#include "StartScene.hpp"
 #include "Point.hpp"
 #include "LightningTurret.hpp"
 
@@ -18,7 +19,10 @@ LightningTurret::LightningTurret(float x, float y):
 void LightningTurret::CreateBullet()
 {
 	Engine::Point zero(0, 0);
-	getPlayScene()->BulletGroup->AddNewObject(new LightningBullet(Position, zero, 0, this));
+	if (getPlayScene() != nullptr)
+		getPlayScene()->BulletGroup->AddNewObject(new LightningBullet(Position, zero, 0, this));
+	else if(getStartScene() != nullptr)
+		getStartScene()->BulletGroup->AddNewObject(new LightningBullet(Position, zero, 0, this));
 	AudioHelper::PlayAudio("lightning.ogg");
 }
 
