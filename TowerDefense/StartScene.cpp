@@ -33,10 +33,13 @@ void StartScene::Initialize()
 	// topic label
 	AddNewObject(new Engine::Label("Tower Defense", "Inkfree.ttf", 80, halfW, halfH / 4 + 10, 0, 0, 0, 255, 0.5, 0.5));
 	// start button
-	startbtn = new Engine::ImageButton("ButtonOut.png", "ButtonIn.png", halfW - 200, halfH * 8 / 5 - 50, 400, 100);
-	startbtn->SetOnClickCallback(std::bind(&StartScene::OnClick, this, 1));
-	AddNewControlObject(startbtn);
-	AddNewObject(startbtntext = new Engine::Label("Start", "Inkfree.ttf", 56, halfW, halfH * 8 / 5, 0, 0, 0, 255, 0.5, 0.5));
+	Engine::ImageButton* btn;
+	Engine::Label* btntext;
+	btn = new Engine::ImageButton("ButtonOut.png", "ButtonIn.png", halfW - 200, halfH / 2 + 450, 400, 100);
+	btn->SetOnClickCallback(std::bind(&StartScene::OnClick, this, 1));
+	AddNewControlObject(btn);
+	AddNewObject(btntext = new Engine::Label("Start", "Inkfree.ttf", 56, halfW, halfH / 2 + 500, 0, 0, 0, 255, 0.5, 0.5));
+	btn->SetLabelBinding(btntext);
 	// BGM
 	bgmInstance = AudioHelper::PlaySample("select.ogg", true, AudioHelper::BGMVolume, 0);
 	// ground effect
@@ -63,7 +66,7 @@ void StartScene::Update(float deltatime)
 	{
 		std::random_device dev;
 		std::mt19937 rng(dev());
-		std::uniform_int_distribution<std::mt19937::result_type> dist(3, 3);
+		std::uniform_int_distribution<std::mt19937::result_type> dist(1, 3);
 		int cur_enemy = dist(rng);
 		Enemy* enemy;
 		switch (cur_enemy) {
@@ -97,11 +100,4 @@ void StartScene::OnClick(int stage)
 	Engine::GameEngine::GetInstance().ChangeScene("stage-select");
 }
 
-void StartScene::OnMouseMove(int mx, int my)
-{
-	IScene::OnMouseMove(mx, my);
-	if (startbtn->mouseIn == true)
-		startbtntext->Color = al_map_rgb(255, 255, 255);
-	else
-		startbtntext->Color = al_map_rgb(0, 0, 0);
-}
+

@@ -16,13 +16,19 @@ void WinScene::Initialize() {
 	int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
 	int halfW = w / 2;
 	int halfH = h / 2;
+	// background image
+	AddNewObject(new Engine::Image("play/GridLight.png", 0, 0, 1600, 833, 0, 0));
 	AddNewObject(new Engine::Image("win/benjamin-sad.png", halfW, halfH, 0, 0, 0.5, 0.5));
-	AddNewObject(new Engine::Label("You Win!", "pirulen.ttf", 48, halfW, halfH / 4 + 10, 255, 255, 255, 255, 0.5, 0.5));
+	AddNewObject(new Engine::Label("You Win ! :D", "Inkfree.ttf", 75, halfW, halfH / 4 + 10, 0, 0, 0, 255, 0.5, 0.5));
+	// button
 	Engine::ImageButton* btn;
-	btn = new Engine::ImageButton("win/dirt.png", "win/floor.png", halfW - 200, halfH * 7 / 4 - 50, 400, 100);
+	Engine::Label* btntext;
+	btn = new Engine::ImageButton("ButtonOut.png", "ButtonIn.png", halfW - 200, halfH * 7 / 4 - 50, 400, 100);
 	btn->SetOnClickCallback(std::bind(&WinScene::BackOnClick, this, 2));
 	AddNewControlObject(btn);
-	AddNewObject(new Engine::Label("Back", "pirulen.ttf", 48, halfW, halfH * 7 / 4, 0, 0, 0, 255, 0.5, 0.5));
+	AddNewObject(btntext = new Engine::Label("Back", "Inkfree.ttf", 48, halfW, halfH * 7 / 4, 0, 0, 0, 255, 0.5, 0.5));
+	btn->SetLabelBinding(btntext);
+	// BGM
 	bgmId = AudioHelper::PlayAudio("win.wav");
 }
 void WinScene::Terminate() {

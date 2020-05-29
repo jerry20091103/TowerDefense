@@ -10,8 +10,6 @@ class StartScene final : public Engine::IScene {
 private:
 	std::shared_ptr<ALLEGRO_SAMPLE_INSTANCE> bgmInstance;
 public:
-	Engine::Label* startbtntext;
-	Engine::ImageButton* startbtn;
 	Engine::Group* TowerGroup;
 	Engine::Group* EnemyGroup;
 	Engine::Group* GroundEffectGroup;
@@ -26,7 +24,6 @@ public:
 	void Update(float deltatime) override;
 	void Terminate() override;
 	void OnClick(int stage); // start button
-	void OnMouseMove(int, int) override;
 };
 
 #endif // STARTSCENE_HPP

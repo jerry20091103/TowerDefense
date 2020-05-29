@@ -31,10 +31,16 @@ void StageSelectScene::Initialize() {
 	AddNewObject(btntext = new Engine::Label("Stage 1", "Inkfree.ttf", 56, halfW, halfH / 2 + 50, 0, 0, 0, 255, 0.5, 0.5));
 	btn->SetLabelBinding(btntext);
 	// stage 2 button
-	btn = new Engine::ImageButton("ButtonOut.png", "ButtonIn.png", halfW - 200, halfH / 2 + 200, 400, 100);
+	btn = new Engine::ImageButton("ButtonOut.png", "ButtonIn.png", halfW - 200, halfH / 2 + 150, 400, 100);
 	btn->SetOnClickCallback(std::bind(&StageSelectScene::PlayOnClick, this, 2));
 	AddNewControlObject(btn);
-	AddNewObject(btntext = new Engine::Label("Stage 2", "Inkfree.ttf", 56, halfW, halfH / 2 + 250, 0, 0, 0, 255, 0.5, 0.5));
+	AddNewObject(btntext = new Engine::Label("Stage 2", "Inkfree.ttf", 56, halfW, halfH / 2 + 200, 0, 0, 0, 255, 0.5, 0.5));
+	btn->SetLabelBinding(btntext);
+	// back button
+	btn = new Engine::ImageButton("ButtonOut.png", "ButtonIn.png", halfW - 200, halfH / 2 + 450, 400, 100);
+	btn->SetOnClickCallback(std::bind(&StageSelectScene::BackOnClick, this));
+	AddNewControlObject(btn);
+	AddNewObject(btntext = new Engine::Label("Back", "Inkfree.ttf", 56, halfW, halfH / 2 + 500, 0, 0, 0, 255, 0.5, 0.5));
 	btn->SetLabelBinding(btntext);
 	// two sliders
     Slider *sliderBGM, *sliderSFX;
@@ -60,6 +66,10 @@ void StageSelectScene::PlayOnClick(int stage) {
     PlayScene* scene = dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetScene("play"));
     scene->MapId = stage;
     Engine::GameEngine::GetInstance().ChangeScene("play");
+}
+void StageSelectScene::BackOnClick()
+{
+	Engine::GameEngine::GetInstance().ChangeScene("Start");
 }
 void StageSelectScene::BGMSlideOnValueChanged(float value) {
     AudioHelper::ChangeSampleVolume(bgmInstance, value);

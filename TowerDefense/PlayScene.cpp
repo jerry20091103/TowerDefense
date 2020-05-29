@@ -357,7 +357,7 @@ void PlayScene::ReadMap() {
 	}
 }
 void PlayScene::ReadEnemyWave() {
-	std::string filename = std::string("resources/enemy") + std::to_string(2) + ".txt";
+	std::string filename = std::string("resources/enemy") + std::to_string(MapId) + ".txt";
 	// Read enemy file.
 	float type, wait, repeat;
 	enemyWaveData.clear();
