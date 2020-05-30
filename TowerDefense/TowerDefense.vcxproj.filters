@@ -135,6 +135,9 @@
     <ClCompile Include="LightningBullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BigTankEnemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sprite.hpp">
@@ -252,6 +255,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LightningBullet.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BigTankEnemy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

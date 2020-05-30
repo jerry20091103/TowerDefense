@@ -27,6 +27,7 @@
 #include "SoldierEnemy.hpp"
 #include "Sprite.hpp"
 #include "TankEnemy.hpp"
+#include "BigTankEnemy.hpp"
 #include "Turret.hpp"
 #include "TurretButton.hpp"
 #include "LOG.hpp"
@@ -76,7 +77,7 @@ void PlayScene::Initialize() {
 	deathBGMInstance = Engine::Resources::GetInstance().GetSampleInstance("astronomia.ogg");
 	Engine::Resources::GetInstance().GetBitmap("lose/benjamin-happy.png");
 	// Start BGM.
-	bgmId = AudioHelper::PlayBGM("play.ogg");
+	bgmId = AudioHelper::PlayBGM("False_Knight.ogg");
 }
 void PlayScene::Terminate() {
 	AudioHelper::StopBGM(bgmId);
@@ -174,6 +175,9 @@ void PlayScene::Update(float deltaTime) {
 	// TODO 2 (7/8): You need to modify 'resources/enemy1.txt', or 'resources/enemy2.txt' to spawn the 4th enemy.
 	//         The format is "[EnemyId] [TimeDelay] [Repeat]".
 	// TODO 2 (8/8): Enable the creation of the 4th enemy.
+		case 4 :
+			EnemyGroup->AddNewObject(enemy = new BigTankEnemy(SpawnCoordinate.x, SpawnCoordinate.y));
+			break;
 		default:
 			continue;
 		}
@@ -196,7 +200,7 @@ void PlayScene::Draw() const {
 			for (int j = 0; j < MapWidth; j++) {
 				if (mapDistance[i][j] != -2) {
 					// Not elegant nor efficient, but it's quite enough for debugging.
-					Engine::Label label(std::to_string(mapDistance[i][j]), "pirulen.ttf", 32, (j + 0.5) * BlockSize, (i + 0.5) * BlockSize);
+					Engine::Label label(std::to_string(mapDistance[i][j]), "Inkfree.ttf", 32, (j + 0.5) * BlockSize, (i + 0.5) * BlockSize);
 					label.Anchor = Engine::Point(0.5, 0.5);
 					label.Draw();
 				}
@@ -370,46 +374,49 @@ void PlayScene::ReadEnemyWave() {
 }
 void PlayScene::ConstructUI() {
 	// Background
-	UIGroup->AddNewObject(new Engine::Image("play/sand.png", 1280, 0, 320, 832));
+	UIGroup->AddNewObject(new Engine::Image("play/sideUI.png", 1280, 0, 320, 832));
 	// Text
-	UIGroup->AddNewObject(new Engine::Label(std::string("Stage ") + std::to_string(MapId), "pirulen.ttf", 32, 1294, 0));
-	UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "pirulen.ttf", 24, 1294, 48));
-	UIGroup->AddNewObject(UILives = new Engine::Label(std::string("Life ") + std::to_string(lives), "pirulen.ttf", 24, 1294, 88));
-	UIGroup->AddNewObject(new Engine::Label(std::string("$") + std::to_string(MachineGunTurret::Price), "pirulen.ttf", 20, 1300, 212));
-	UIGroup->AddNewObject(new Engine::Label(std::string("$") + std::to_string(LaserTurret::Price), "pirulen.ttf", 20, 1294+76, 212));
-	UIGroup->AddNewObject(new Engine::Label(std::string("$") + std::to_string(MissileTurret::Price), "pirulen.ttf", 20, 1294+76*2, 212));
-	UIGroup->AddNewObject(new Engine::Label(std::string("$") + std::to_string(LightningTurret::Price), "pirulen.ttf", 20, 1294+76*3, 212));
+	UIGroup->AddNewObject(new Engine::Label(std::string("Stage ") + std::to_string(MapId), "Inkfree.ttf", 50, 1310, 3));
+	UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "Inkfree.ttf", 38, 1310, 75));
+	UIGroup->AddNewObject(UILives = new Engine::Label(std::string("Life ") + std::to_string(lives), "Inkfree.ttf", 38, 1310, 142));
+	UIGroup->AddNewObject(new Engine::Label(std::string("$") + std::to_string(MachineGunTurret::Price), "Inkfree.ttf", 30, 1400, 265));
+	UIGroup->AddNewObject(new Engine::Label(std::string("$") + std::to_string(LaserTurret::Price), "Inkfree.ttf", 30, 1400, 345));
+	UIGroup->AddNewObject(new Engine::Label(std::string("$") + std::to_string(MissileTurret::Price), "Inkfree.ttf", 30, 1400, 425));
+	UIGroup->AddNewObject(new Engine::Label(std::string("$") + std::to_string(LightningTurret::Price), "Inkfree.ttf", 30, 1400, 505));
 	TurretButton* btn;
 	// Button 1
 	btn = new TurretButton("play/floor.png", "play/dirt.png",
-		Engine::Sprite("play/tower-base.png", 1294, 136, 0, 0, 0, 0),
-		Engine::Sprite("play/turret-1.png", 1294, 136 - 8, 0, 0, 0, 0)
-		, 1294, 136, MachineGunTurret::Price);
+		Engine::Sprite("play/tower-base.png", 1320, 255, 0, 0, 0, 0),
+		Engine::Sprite("play/turret-1.png", 1320, 255 - 8, 0, 0, 0, 0)
+		, 1320, 255, MachineGunTurret::Price);
 	// Reference: Class Member Function Pointer and std::bind.
 	btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 0));
 	UIGroup->AddNewControlObject(btn);
 	// Button 2
 	btn = new TurretButton("play/floor.png", "play/dirt.png",
-		Engine::Sprite("play/tower-base.png", 1370, 136, 0, 0, 0, 0),
-		Engine::Sprite("play/turret-2.png", 1370, 136 - 8, 0, 0, 0, 0)
-		, 1370, 136, LaserTurret::Price);
+		Engine::Sprite("play/tower-base.png", 1320, 335, 0, 0, 0, 0),
+		Engine::Sprite("play/turret-2.png", 1320, 335 - 8, 0, 0, 0, 0)
+		, 1320, 335, LaserTurret::Price);
 	btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 1));
 	UIGroup->AddNewControlObject(btn);
 	// Button 3
 	btn = new TurretButton("play/floor.png", "play/dirt.png",
-		Engine::Sprite("play/tower-base.png", 1446, 136, 0, 0, 0, 0),
-		Engine::Sprite("play/turret-3.png", 1446, 136, 0, 0, 0, 0)
-		, 1446, 136, MissileTurret::Price);
+		Engine::Sprite("play/tower-base.png", 1320, 415, 0, 0, 0, 0),
+		Engine::Sprite("play/turret-3.png", 1320, 415, 0, 0, 0, 0)
+		, 1320, 415, MissileTurret::Price);
 	btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 2));
 	UIGroup->AddNewControlObject(btn);
 	// TODO 2 (3/8): Create a button to support constructing the 4th tower.
 	// Button 4
 	btn = new TurretButton("play/floor.png", "play/dirt.png",
-		Engine::Sprite("play/tower-base.png", 1446+76, 136, 0, 0, 0, 0),
-		Engine::Sprite("play/turret-8.png", 1446+76+4, 136+4, 0, 0, 0, 0)
-		, 1446+76, 136, LightningTurret::Price);
+		Engine::Sprite("play/tower-base.png", 1320, 495, 0, 0, 0, 0),
+		Engine::Sprite("play/turret-8.png", 1320+4, 495+4, 0, 0, 0, 0)
+		, 1320, 495, LightningTurret::Price);
 	btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 3));
 	UIGroup->AddNewControlObject(btn);
+	// base logo
+	UIGroup->AddNewObject(new Engine::Image("play/base.png", 1295, 833 - 150, 150, 150, 0, 0));
+	UIGroup->AddNewObject(new Engine::Label("Base", "Inkfree.ttf", 38, 1295 + 150, 833 - 100, 0, 0, 0, 255));
 	int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
 	int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
 	int shift = 135 + 25;

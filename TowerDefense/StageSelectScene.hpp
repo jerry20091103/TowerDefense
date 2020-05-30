@@ -17,7 +17,6 @@ public:
 	void BackOnClick();
 	void BGMSlideOnValueChanged(float value);
 	void SFXSlideOnValueChanged(float value);
-	void OnMouseMove(int mx, int my) override;
 };
 
 #endif // STAGESELECTSCENE_HPP

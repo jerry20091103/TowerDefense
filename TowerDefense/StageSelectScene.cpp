@@ -53,7 +53,7 @@ void StageSelectScene::Initialize() {
     AddNewControlObject(sliderSFX);
     AddNewObject(new Engine::Label("SFX: ", "Inkfree.ttf", 40, 40 + halfW - 60 - 650, h - 100, 0, 0, 0, 255, 0.5, 0.5));
     // Not safe if release resource while playing, however we only free while change scene, so it's fine.
-	bgmInstance = AudioHelper::PlaySample("select.ogg", true, AudioHelper::BGMVolume);
+	bgmInstance = AudioHelper::PlaySample("hotel_battle.ogg", true, AudioHelper::BGMVolume);
     sliderBGM->SetValue(AudioHelper::BGMVolume);
     sliderSFX->SetValue(AudioHelper::SFXVolume);
 }
@@ -79,15 +79,3 @@ void StageSelectScene::SFXSlideOnValueChanged(float value) {
     AudioHelper::SFXVolume = value;
 }
 
-void StageSelectScene::OnMouseMove(int mx, int my)
-{
-	IScene::OnMouseMove(mx, my);
-	/*for (auto it : UIbtnGroup->GetObjects())
-	{
-		if(dynamic_cast<Engine::ImageButton*>(it)->label == nullptr)
-		if (dynamic_cast<Engine::ImageButton*>(it)->mouseIn)
-			dynamic_cast<Engine::ImageButton*>(it)->label->Color = al_map_rgb(255, 255, 255);
-		else
-			dynamic_cast<Engine::ImageButton*>(it)->label->Color = al_map_rgb(0, 0, 0);
-	}*/
-}

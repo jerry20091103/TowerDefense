@@ -21,6 +21,7 @@
 #include "PlaneEnemy.hpp"
 #include "SoldierEnemy.hpp"
 #include "TankEnemy.hpp"
+#include "BigTankEnemy.hpp"
 
 void StartScene::Initialize()
 {
@@ -41,7 +42,7 @@ void StartScene::Initialize()
 	AddNewObject(btntext = new Engine::Label("Start", "Inkfree.ttf", 56, halfW, halfH / 2 + 500, 0, 0, 0, 255, 0.5, 0.5));
 	btn->SetLabelBinding(btntext);
 	// BGM
-	bgmInstance = AudioHelper::PlaySample("select.ogg", true, AudioHelper::BGMVolume, 0);
+	bgmInstance = AudioHelper::PlaySample("hotel.ogg", true, AudioHelper::BGMVolume, 0);
 	// ground effect
 	AddNewObject(GroundEffectGroup = new Group);
 	// Turrets
@@ -66,7 +67,7 @@ void StartScene::Update(float deltatime)
 	{
 		std::random_device dev;
 		std::mt19937 rng(dev());
-		std::uniform_int_distribution<std::mt19937::result_type> dist(1, 3);
+		std::uniform_int_distribution<std::mt19937::result_type> dist(1, 4);
 		int cur_enemy = dist(rng);
 		Enemy* enemy;
 		switch (cur_enemy) {
@@ -78,6 +79,9 @@ void StartScene::Update(float deltatime)
 			break;
 		case 3:
 			EnemyGroup->AddNewObject(enemy = new TankEnemy(0*blocksize, 6.25 * blocksize));
+			break;
+		case 4:
+			EnemyGroup->AddNewObject(enemy = new BigTankEnemy(0 * blocksize, 6.25 * blocksize));
 			break;
 		default:
 			return;

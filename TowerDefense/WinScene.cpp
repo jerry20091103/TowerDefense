@@ -19,7 +19,7 @@ void WinScene::Initialize() {
 	// background image
 	AddNewObject(new Engine::Image("play/GridLight.png", 0, 0, 1600, 833, 0, 0));
 	AddNewObject(new Engine::Image("win/benjamin-sad.png", halfW, halfH, 0, 0, 0.5, 0.5));
-	AddNewObject(new Engine::Label("You Win ! :D", "Inkfree.ttf", 75, halfW, halfH / 4 + 10, 0, 0, 0, 255, 0.5, 0.5));
+	AddNewObject(new Engine::Label("You Win ! :p", "Inkfree.ttf", 75, halfW, halfH / 4 + 10, 0, 0, 0, 255, 0.5, 0.5));
 	// button
 	Engine::ImageButton* btn;
 	Engine::Label* btntext;
@@ -29,7 +29,7 @@ void WinScene::Initialize() {
 	AddNewObject(btntext = new Engine::Label("Back", "Inkfree.ttf", 48, halfW, halfH * 7 / 4, 0, 0, 0, 255, 0.5, 0.5));
 	btn->SetLabelBinding(btntext);
 	// BGM
-	bgmId = AudioHelper::PlayAudio("win.wav");
+	bgmId = AudioHelper::PlayAudio("astronomia_sad.ogg");
 }
 void WinScene::Terminate() {
 	IScene::Terminate();
@@ -37,7 +37,7 @@ void WinScene::Terminate() {
 }
 void WinScene::Update(float deltaTime) {
 	ticks += deltaTime;
-	if (ticks > 4 && ticks < 100 &&
+	if (ticks > 46 && ticks < 100 &&
 		dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetScene("play"))->MapId == 2) {
 		ticks = 100;
 		bgmId = AudioHelper::PlayBGM("happy.ogg");

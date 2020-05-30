@@ -156,12 +156,12 @@ void Enemy::Update(float deltaTime) {
 	// Check if out of boundary.
 	if (getPlayScene() != nullptr)
 	{
-		if (!Engine::Collider::IsRectOverlap(Position - Size / 2, Position + Size / 2, Engine::Point(0, 0), Engine::Point(1600, 833)))
+		if (!Engine::Collider::IsRectOverlap(Position - Size / 2, Position + Size / 2, Engine::Point(-30, -30), Engine::Point(1630, 863)))
 			getPlayScene()->EnemyGroup->RemoveObject(objectIterator);
 	}
 	else if (getStartScene() != nullptr)
 	{
-		if (!Engine::Collider::IsRectOverlap(Position - Size / 2, Position + Size / 2, Engine::Point(0, 0), Engine::Point(1600, 833)))
+		if (!Engine::Collider::IsRectOverlap(Position - Size / 2, Position + Size / 2, Engine::Point(-30, -30), Engine::Point(1630, 863)))
 			getStartScene()->EnemyGroup->RemoveObject(objectIterator);
 	}
 }
