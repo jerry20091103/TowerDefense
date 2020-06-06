@@ -31,29 +31,4 @@
 [INFO] Changed to stage-select scene
 [INFO] stopped audio (sample)
 [INFO] Loaded Resource<image>: resources/images/play/Gridx1.png scaled to 64x64
-[INFO] Loaded Resource<image>: resources/images/play/sideUI.png scaled to 320x832
-[INFO] Loaded Resource<font>: resources/fonts/Inkfree.ttf with size 50
-[INFO] Loaded Resource<font>: resources/fonts/Inkfree.ttf with size 38
-[INFO] Loaded Resource<font>: resources/fonts/Inkfree.ttf with size 30
-[INFO] Loaded Resource<image>: resources/images/play/floor.png
-[INFO] Loaded Resource<image>: resources/images/play/dirt.png
-[INFO] Loaded Resource<image>: resources/images/play/base.png scaled to 150x150
-[INFO] Loaded Resource<image>: resources/images/play/benjamin.png
-[INFO] Loaded Resource<image>: resources/images/play/target.png
-[INFO] Loaded Resource<audio>: resources/audios/astronomia.ogg
-[INFO] Created<sample_instance>: resources/audios/astronomia.ogg
-[INFO] Loaded Resource<image>: resources/images/lose/benjamin-happy.png
-[INFO] Loaded Resource<audio>: resources/audios/False_Knight.ogg
-[INFO] Changed to play scene
-[INFO] Loaded Resource<image>: resources/images/play/enemy-1.png
-[INFO] Loaded Resource<image>: resources/images/play/bullet-1.png
-[INFO] Loaded Resource<audio>: resources/audios/gun.wav
-[INFO] Loaded Resource<image>: resources/images/play/dirty-1.png
-[INFO] Loaded Resource<image>: resources/images/play/explosion-1.png
-[INFO] Loaded Resource<image>: resources/images/play/explosion-2.png
-[INFO] Loaded Resource<image>: resources/images/play/explosion-3.png
-[INFO] Loaded Resource<image>: resources/images/play/explosion-4.png
-[INFO] Loaded Resource<image>: resources/images/play/explosion-5.png
-[INFO] Loaded Resource<image>: resources/images/play/dirty-3.png
-[INFO] Loaded Resource<image>: resources/images/play/dirty-2.png
-[INFO] Loaded Resource<audio>: resources/audios/explosion.wav
+[INFO] Loaded Resource<image>: resources/images/play/floor.png scaled to 64x64
